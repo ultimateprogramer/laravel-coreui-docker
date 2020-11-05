@@ -18,7 +18,9 @@ RUN apt-get update && apt-get install -y \
     vim \
     unzip \
     git \
-    curl
+    curl \
+    openssl \
+    nginx
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -31,12 +33,19 @@ RUN docker-php-ext-install gd
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Copy existing application directory contents
+COPY . /var/www
+
+# Composer and initial artisan stuff
+RUN composer install --working-dir="/var/www"
+RUN composer update laravel/framework --working-dir="/var/www"
+RUN composer dump-autoload --working-dir="/var/www"
+RUN php artisan config:clear
+RUN php artisan config:cache
+
 # Add user for laravel application
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Copy existing application directory contents
-COPY . /var/www
 
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www
@@ -45,5 +54,7 @@ COPY --chown=www:www . /var/www
 USER www
 
 # Expose port 9000 and start php-fpm server
-EXPOSE 9000
-CMD ["php-fpm"]
+RUN ["chmod", "+x", "post_deploy.sh"]
+EXPOSE 80
+
+CMD [ "sh", "./post_deploy.sh" ]

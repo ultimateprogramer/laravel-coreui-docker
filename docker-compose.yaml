@@ -16,24 +16,12 @@ services:
     working_dir: /var/www
     networks:
       - app-network
+    ports:
+      - "80:80"
     volumes:
        - ./:/var/www
        - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-
-  #Nginx Service
-  webserver:
-    image: nginx:alpine
-    container_name: webserver
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - app-network
-    volumes:
-      - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+       - ./nginx/conf.d/:/etc/nginx/conf.d/
 
   #MySQL Service
   db:
