@@ -43,7 +43,6 @@ RUN composer install --working-dir="/var/www"
 RUN composer update laravel/framework --working-dir="/var/www"
 RUN composer dump-autoload --working-dir="/var/www"
 RUN php artisan config:clear
-RUN php artisan config:cache
 
 # Change permissions
 RUN chmod +rwx /var/www
