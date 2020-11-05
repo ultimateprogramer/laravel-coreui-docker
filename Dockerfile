@@ -45,12 +45,9 @@ RUN composer dump-autoload --working-dir="/var/www"
 RUN php artisan config:clear
 RUN php artisan config:cache
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Copy existing application directory permissions
-COPY --chown=www:www . /var/www
+# Change permissions
+RUN chmod +rwx /var/www
+RUN chmod -R 777 /var/www
 
 # Expose port 9000 and start php-fpm server
 RUN ["chmod", "+x", "post_deploy.sh"]

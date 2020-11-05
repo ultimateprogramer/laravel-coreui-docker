@@ -111,6 +111,13 @@ docker-compose exec app php artisan migrate
 docker-compose exec app php artisan db:seed
 ```
 
+### Cache Clear
+
+```
+docker-compose exec app php artisan cache:clear
+```
+
+
 ## Environment Variable Settings for API End Points
 
 * `COREUI_API_ENABLED` for enable / disable API endpoints supplied by Laravel-CoreUI and
