@@ -52,6 +52,16 @@ Basically, feel free to use and re-use any way you want.
 
 - Check out [this reference](https://geshan.com.np/blog/2019/10/get-laravel-6-running-on-google-cloud-run-step-by-step-with-ci/)
 
+### Cloud Run Special Endpoints
+
+These controllers are in `app/Http/Controllers/Api/Exec/`. The routes are:
+
+* `api/exec/composer` : Install Composer Packages.
+* `api/exec/keyandcache` : Create a Secret Key and Config Cache.
+* `api/exec/dbmigrate` : Do a DB Migration.
+* `api/exec/dbseed` : Seed the Database after initialization.
+
+
 ## Running Artisan Commands & Initializing App
 
 ### Composer install packages
@@ -74,6 +84,12 @@ docker-compose exec app php artisan key:generate
 docker-compose exec app php artisan config:cache
 ```
 
+### How to reload the .env file and other configs
+
+```
+docker-compose exec app php artisan config:clear
+```
+
 ### Accessing the MySQL DB
 
 ```
@@ -94,3 +110,10 @@ EXIT;
 docker-compose exec app php artisan migrate
 docker-compose exec app php artisan db:seed
 ```
+
+## Environment Variable Settings for API End Points
+
+* `COREUI_API_ENABLED` for enable / disable API endpoints supplied by Laravel-CoreUI and
+* `CLOUD_RUN_EXEC_API_ENABLED`  for enable / disable cloud run endpoints.
+
+These can be set to `true` or `false`.
